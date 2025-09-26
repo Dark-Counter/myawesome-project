@@ -6,6 +6,7 @@
     <title>Контакты</title>
     <meta name="description" content="Краткое описание страницы контактов">
     <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
  <header>
@@ -26,14 +27,88 @@
  <span>Контакты</span>
  </nav>
  <h1>Контакты</h1>
- <section>
- <h2>Наши контакты</h2>
- <p>Текст где расположены наши контакты</p>
- </section>
- <section>
- <h2>Наши координаты</h2>
- <p>Текст где расположены наши координаты</p>
- </section>
+<section>
+<h2>Свяжитесь с нами</h2>
+<form id="contactForm" novalidate>
+    <div class="form-row">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required placeholder="you@example.com">
+    </div>
+    <div class="form-row">
+        <label for="phone">Телефон</label>
+        <input type="tel" id="phone" name="phone" required pattern="^\+?[0-9\s\-()]{7,}$" placeholder="+7 999 123-45-67">
+    </div>
+    <div class="form-row">
+        <label for="date">Дата</label>
+        <input type="date" id="date" name="date" required>
+    </div>
+    <div class="form-row">
+        <label for="topic">Тема обращения</label>
+        <select id="topic" name="topic" required>
+            <option value="" disabled selected>Выберите тему</option>
+            <option value="support">Поддержка</option>
+            <option value="sales">Продажи</option>
+            <option value="other">Другое</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <label for="message">Сообщение</label>
+        <textarea id="message" name="message" rows="5" required placeholder="Опишите ваш запрос..."></textarea>
+    </div>
+    <button type="submit">Отправить</button>
+    <p id="formError" role="alert" style="color:#e33; display:none; margin:0;">Пожалуйста, заполните все обязательные поля корректно.</p>
+    <p id="formSuccess" role="status" style="color:#16a34a; display:none; margin:0;">Форма успешно отправлена!</p>
+  </form>
+</section>
+
+<!-- Модальное окно -->
+<div class="modal-backdrop" id="successModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="successTitle">
+  <div class="modal">
+    <h3 id="successTitle">Спасибо!</h3>
+    <p>Ваше сообщение отправлено. Мы свяжемся с вами в ближайшее время.</p>
+    <div class="actions">
+      <button type="button" id="closeModal">Закрыть</button>
+    </div>
+  </div>
+  </div>
+
+<script>
+(function(){
+  const form = document.getElementById('contactForm');
+  const errorEl = document.getElementById('formError');
+  const successEl = document.getElementById('formSuccess');
+  const modal = document.getElementById('successModal');
+  const closeBtn = document.getElementById('closeModal');
+
+  function openModal(){
+    modal.setAttribute('aria-hidden', 'false');
+    closeBtn.focus();
+  }
+  function closeModal(){
+    modal.setAttribute('aria-hidden', 'true');
+  }
+  closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', function(e){ if(e.target === modal){ closeModal(); }});
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ closeModal(); }});
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    errorEl.style.display = 'none';
+    successEl.style.display = 'none';
+
+    if(!form.checkValidity()){
+      errorEl.style.display = 'block';
+      form.reportValidity();
+      return;
+    }
+
+    // Имитируем успешную отправку
+    successEl.style.display = 'block';
+    openModal();
+    form.reset();
+  });
+})();
+</script>
  </main>
  <footer>
     <p>&copy; 2023 Название вашего сайта. Все права защищены.</p>
